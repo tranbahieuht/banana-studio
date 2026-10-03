@@ -122,9 +122,9 @@ function CodeAndPreview() {
           <span className="dev-code-line"><i>01</i><span><b>export default function</b> Product() {'{'}</span></span>
           <span className="dev-code-line"><i>02</i><span>  <b>return</b> (</span></span>
           <span className="dev-code-line"><i>03</i><span>    &lt;<em>main</em> className=<strong>&quot;product&quot;</strong>&gt;</span></span>
-          <span className="dev-code-line"><i>04</i><span>      &lt;<em>h1</em>&gt;Your idea, realized.&lt;/<em>h1</em>&gt;</span></span>
-          <span className="dev-code-line"><i>05</i><span>      &lt;<em>p</em>&gt;Meaningful digital products.&lt;/<em>p</em>&gt;</span></span>
-          <span className="dev-code-line"><i>06</i><span>      &lt;<em>button</em>&gt;Get started&lt;/<em>button</em>&gt;</span></span>
+          <span className="dev-code-line is-current"><i>04</i><span>      &lt;<em>h1</em>&gt;Mỗi ý tưởng&lt;/<em>h1</em>&gt;<i className="dev-code-cursor" aria-hidden="true" /></span></span>
+          <span className="dev-code-line"><i>05</i><span>      &lt;<em>p</em>&gt;Tìm lộ trình phù hợp.&lt;/<em>p</em>&gt;</span></span>
+          <span className="dev-code-line"><i>06</i><span>      &lt;<em>button</em>&gt;Khám phá&lt;/<em>button</em>&gt;</span></span>
           <span className="dev-code-line"><i>07</i><span>    &lt;/<em>main</em>&gt;</span></span>
           <span className="dev-code-line"><i>08</i><span>  );</span></span>
           <span className="dev-code-line"><i>09</i><span>{'}'}</span></span>
