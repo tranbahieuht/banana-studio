@@ -180,44 +180,49 @@ body {
 .service-flow-step { border-color: var(--banana) !important; color: var(--foreground); }
 .service-flow-step:hover { color: var(--accent-ink); }
 
-.hero-meta, .hero-footer, .gallery-caption { border-color: var(--rule); color: var(--foreground-muted); }
-.hero-layout { min-height: min(70svh, 710px); }
+.hero-meta, .hero-footer, .architecture-caption { border-color: var(--rule); color: var(--foreground-muted); }
+.hero-layout { min-height: 0; }
 .hero-title { color: var(--foreground); }
 .hero-title-accent { color: var(--accent-ink); }
 .hero-primary { color: #151515; background: var(--banana); transition: transform 220ms var(--motion-ease), background-color 220ms ease; }
 .hero-primary:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--banana) 87%, white); }
 .hero-secondary { color: var(--foreground); border-color: var(--rule); transition: color 180ms ease, border-color 180ms ease; }
 .hero-secondary:hover { color: var(--accent-ink); border-color: var(--accent-ink); }
-.hero-gallery { padding: 0 1.25rem; }
-.gallery-stage { min-height: clamp(370px, 42vw, 560px); }
-.gallery-window { position: absolute; top: 9%; left: 2.5%; z-index: 10; width: 92%; overflow: hidden; color: #171814; border: 1px solid #d6d6ce; background: #fff; box-shadow: 0 16px 42px rgb(20 22 16 / 9%), 8px 8px 0 rgb(240 219 59 / 36%); transform-style: preserve-3d; }
-.gallery-windowbar { color: #64655f; border-color: #e6e5de; background: #fbfbf8; }
-.gallery-windowbar i { display: block; width: 6px; height: 6px; border-radius: 50%; background: #cdcdc4; }
-.gallery-windowbar i:last-child { background: #ddc52d; }
-.gallery-copy { color: #191a16; background: #fff; }
-.gallery-copy p { color: #686a61; }
-.gallery-copy :is(.border-t) { border-color: #e6e5de; }
-.gallery-accent { color: #8d7700; }
-.gallery-art { background: #e9eee8; }
-.gallery-art-grid { opacity: 0.8; background-image: linear-gradient(to right, rgb(41 53 43 / 8%) 1px, transparent 1px), linear-gradient(to bottom, rgb(41 53 43 / 8%) 1px, transparent 1px); background-size: 24px 24px; }
-.gallery-art-label, .gallery-art-index { color: #596258; }
-.gallery-art-index { border-color: rgb(68 83 69 / 28%); }
-.gallery-object { position: absolute; inset: 19% 12% 17%; display: grid; place-items: center; }
-.gallery-object-shape { position: absolute; width: 67%; aspect-ratio: 0.78; border: 1px solid rgb(27 38 29 / 38%); background: linear-gradient(145deg, #f0db3b 0 28%, #d8e2d2 28% 100%); box-shadow: 12px 14px 0 rgb(38 53 39 / 10%); transform: rotate(-8deg); transition: transform 380ms var(--motion-ease); }
-.gallery-object-2 .gallery-object-shape { background: linear-gradient(90deg, #dce8de 0 28%, #f0db3b 28% 70%, #f6f4ea 70%); transform: rotate(5deg) scale(.94); }
-.gallery-object-3 .gallery-object-shape { background: linear-gradient(155deg, #dce8de 0 42%, #f0db3b 42% 58%, #eef0e8 58%); transform: rotate(-3deg) scale(1.04); }
-.gallery-object-cut { position: absolute; width: 42%; aspect-ratio: 1; border: 1px solid rgb(27 38 29 / 34%); background: #eef0e8; transform: translate(28%, 22%) rotate(14deg); }
-.gallery-object-line { position: absolute; right: 5%; bottom: 10%; width: 54%; height: 1px; background: rgb(27 38 29 / 44%); transform: rotate(-24deg); }
-.gallery-tabs { color: #696a62; border-color: #e6e5de; background: #fbfbf8; }
-.gallery-tab { color: #686a61; border: 1px solid transparent; transition: color 180ms ease, border-color 180ms ease, background-color 180ms ease; }
-.gallery-tab:hover { color: #171814; }
-.gallery-tab.is-active { color: #171814; border-color: #d8d7cc; background: #f1f0e8; }
-.gallery-note { color: var(--foreground); border-color: var(--rule); background: var(--surface); box-shadow: 0 8px 22px rgb(20 22 16 / 7%); }
-.gallery-note span + span { border-color: var(--rule); }
-.gallery-index { color: var(--foreground-muted); }
-.gallery-crosshair { position: absolute; z-index: 0; width: 26px; height: 26px; border-color: var(--rule); }
-.gallery-crosshair-top { top: 2%; left: 1%; border-top: 1px solid; border-left: 1px solid; }
-.gallery-crosshair-bottom { right: 1%; bottom: 1%; border-right: 1px solid; border-bottom: 1px solid; }
+.architecture-board { position: relative; isolation: isolate; width: 100%; aspect-ratio: 700 / 480; overflow: hidden; border: 1px solid var(--rule); background: var(--surface); color: var(--foreground); }
+.architecture-board::before { position: absolute; inset: 0; z-index: -1; content: ""; background: linear-gradient(90deg, var(--surface-alt) 1px, transparent 1px), linear-gradient(var(--surface-alt) 1px, transparent 1px); background-size: 40px 40px; opacity: 0.44; mask-image: linear-gradient(to bottom, #000 0%, transparent 82%); }
+.architecture-parallax { will-change: transform; }
+.architecture-lines { overflow: visible; }
+.architecture-lines-mobile { display: none; }
+.architecture-grid-lines { fill: none; stroke: var(--rule); stroke-width: 0.7; opacity: 0.42; }
+.architecture-connector { fill: none; stroke: var(--foreground-muted); stroke-width: 1.25; vector-effect: non-scaling-stroke; transition: stroke 220ms ease, stroke-width 220ms ease; }
+.architecture-connector.is-active { stroke: var(--accent-ink); stroke-width: 1.8; }
+.architecture-feedback { fill: none; stroke: var(--accent-ink); stroke-width: 1; stroke-dasharray: 3 7; vector-effect: non-scaling-stroke; animation: architecture-flow 18s linear infinite; }
+.architecture-node { position: absolute; z-index: 2; display: flex; width: clamp(132px, 22%, 166px); min-height: 88px; flex-direction: column; justify-content: space-between; padding: 11px 12px; border: 1px solid var(--rule); background: var(--surface); color: var(--foreground); text-align: left; transform: translate(-50%, -50%); transition: border-color 200ms ease, background-color 200ms ease, box-shadow 200ms ease, transform 200ms var(--motion-ease); }
+.architecture-node:hover { z-index: 3; transform: translate(-50%, -52%); }
+.architecture-node.is-active { border-color: var(--accent-ink); background: var(--surface-alt); box-shadow: 3px 3px 0 color-mix(in srgb, var(--banana) 75%, transparent); }
+.architecture-node:focus-visible { z-index: 4; outline: 2px solid var(--accent-ink); outline-offset: 3px; }
+.architecture-node-idea { left: 24.3%; top: 27.5%; }
+.architecture-node-experience { left: 49.7%; top: 48%; }
+.architecture-node-technology { left: 24.3%; top: 72.9%; }
+.architecture-node-product { left: 76.8%; top: 48%; }
+.architecture-node-top, .architecture-node-state { display: flex; align-items: center; justify-content: space-between; gap: 8px; font: 8px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.08em; }
+.architecture-node-top { color: var(--foreground-muted); }
+.architecture-node-icon { display: flex; color: var(--accent-ink); }
+.architecture-node-name { margin-block: 8px 6px; font-size: clamp(14px, 1.4vw, 17px); font-weight: 500; letter-spacing: -0.04em; }
+.architecture-node-state { justify-content: flex-start; color: var(--foreground-muted); font-size: 7px; }
+.architecture-node-state i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: var(--foreground-muted); }
+.architecture-node.is-active .architecture-node-state i { background: var(--accent-ink); }
+.architecture-system { color: var(--foreground-muted); border-color: var(--rule); }
+.architecture-selected { color: var(--foreground-muted); }
+.architecture-coordinate { position: absolute; z-index: 1; color: var(--foreground-muted); font: 7px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.1em; opacity: 0.8; }
+.architecture-coordinate-tl { top: 12px; left: 14px; }
+.architecture-coordinate-br { right: 14px; bottom: 44px; }
+.architecture-corner { position: absolute; z-index: 1; width: 14px; height: 14px; border-color: var(--accent-ink); opacity: 0.7; }
+.architecture-corner-tl { top: 8px; left: 8px; border-top: 1px solid; border-left: 1px solid; }
+.architecture-corner-br { right: 8px; bottom: 8px; border-right: 1px solid; border-bottom: 1px solid; }
+.architecture-live-dot { box-shadow: 0 0 0 3px color-mix(in srgb, var(--banana) 24%, transparent); }
+.architecture-mobile-detail { color: var(--foreground-muted); }
+@keyframes architecture-flow { to { stroke-dashoffset: -100; } }
 
 .blueprint-section { background: var(--surface-alt) !important; color: var(--foreground); }
 .blueprint-section .blueprint-board { border-color: var(--rule) !important; background: var(--surface) !important; }
@@ -242,21 +247,22 @@ body {
 }
 
 @media (max-width: 639px) {
-  .hero-gallery { padding-inline: 0; }
-  .gallery-stage { min-height: 360px; }
-  .gallery-window { top: 8%; left: 2%; width: 96%; }
-  .gallery-windowbody { min-height: 248px; }
-  .gallery-object-shape { width: 72%; }
-  .gallery-art-grid { background-size: 19px 19px; }
+  .architecture-board { aspect-ratio: 400 / 360; }
+  .architecture-lines-desktop { display: none; }
+  .architecture-lines-mobile { display: block; }
+  .architecture-node { width: clamp(124px, 38%, 150px); min-height: 84px; padding: 10px 11px; }
+  .architecture-node-idea { left: 25%; top: 22.8%; }
+  .architecture-node-experience { left: 75%; top: 22.8%; }
+  .architecture-node-technology { left: 25%; top: 75%; }
+  .architecture-node-product { left: 75%; top: 75%; }
+  .architecture-coordinate-br { bottom: 42px; }
+  .architecture-node-name { font-size: 14px; }
+  .architecture-system { left: 12px; right: 12px; bottom: 12px; gap: 6px; font-size: 6px; }
 }
 
 @media (max-width: 374px) {
-  .gallery-stage { min-height: 340px; }
-  .gallery-windowbody { min-height: 228px; }
-  .gallery-windowbar { padding-inline: 0.5rem; }
-  .gallery-tabs { padding-inline: 0.45rem; }
-  .gallery-tab { padding-inline: 0.35rem; font-size: 6px; }
-  .gallery-copy { padding: 0.65rem; }
+  .architecture-board { aspect-ratio: 400 / 390; }
+  .architecture-node { width: 126px; }
 }
 
 @media (hover: hover) { .animate-marquee:hover { animation-play-state: paused; } }
@@ -278,4 +284,5 @@ body {
   section[aria-label*="product engine"] { min-height: auto !important; }
   section[aria-label*="product engine"] > .sticky { position: static !important; min-height: 100svh !important; }
   .theme-transitioning *, .theme-transitioning *::before, .theme-transitioning *::after { transition: none !important; }
+  .architecture-feedback { animation: none !important; }
 }
