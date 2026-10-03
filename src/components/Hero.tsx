@@ -30,7 +30,7 @@ export default function Hero() {
           <span className="hidden md:block">Sản phẩm số / 01</span>
         </motion.div>
 
-        <div className="hero-layout grid items-center gap-8 py-9 sm:gap-10 sm:py-12 lg:grid-cols-[0.88fr_1.12fr] lg:gap-8 lg:py-10">
+        <div className="hero-layout grid items-center gap-8 py-9 sm:gap-10 sm:py-12 lg:grid-cols-[1fr_1fr] lg:gap-8 lg:py-10 min-[1280px]:grid-cols-[0.724fr_1fr] min-[1280px]:gap-[clamp(3rem,4vw,4.5rem)]">
           <div className="relative z-10 max-w-[600px]">
             <motion.p
               initial={reduceMotion ? false : { opacity: 0, clipPath: "inset(0 100% 0 0)" }}

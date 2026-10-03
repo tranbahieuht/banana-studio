@@ -192,22 +192,26 @@ body {
 .hero-workspace-wrap { perspective: 1000px; }
 .workspace-caption { color: var(--foreground-muted); }
 .workspace-caption-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--banana); box-shadow: 0 0 0 3px color-mix(in srgb, var(--banana) 13%, transparent); }
-.dev-workspace { overflow: hidden; border: 1px solid #393a33; border-radius: 10px; background: #121310; color: #e8e8e0; box-shadow: 0 18px 48px rgb(0 0 0 / 28%), 0 2px 0 rgb(255 255 255 / 3%) inset; will-change: transform; }
-.dev-workspace-titlebar { display: flex; height: 48px; align-items: center; gap: 10px; padding: 0 13px; border-bottom: 1px solid #30312b; background: #191a17; }
+.dev-workspace { --workspace-bg: #111210; --workspace-surface: #191a17; --workspace-elevated: #20211d; --workspace-border: #30312b; --workspace-text: #f2f1eb; --workspace-muted: #999b91; --workspace-accent: #f1df35; --workspace-positive: #91ad8d; overflow: hidden; border: 1px solid var(--workspace-border); border-radius: 10px; background: var(--workspace-bg); color: var(--workspace-text); box-shadow: 0 12px 32px rgb(0 0 0 / 20%), 0 1px 0 rgb(255 255 255 / 3%) inset; will-change: transform; }
+:root[data-theme="light"] .dev-workspace { --workspace-bg: #f1f0e8; --workspace-surface: #f7f6f0; --workspace-elevated: #e8e7de; --workspace-border: #d5d4ca; --workspace-text: #272821; --workspace-muted: #72736a; --workspace-accent: #8f7b12; --workspace-positive: #557c58; box-shadow: 0 10px 30px rgb(0 0 0 / 10%), 0 1px 0 rgb(255 255 255 / 65%) inset; }
+.dev-workspace-titlebar { display: flex; height: 48px; align-items: center; gap: 10px; padding: 0 13px; border-bottom: 1px solid var(--workspace-border); background: var(--workspace-surface); }
+.dev-workspace-titlebar { opacity: 0; animation: workspace-part-in 360ms var(--motion-ease) 90ms forwards; }
 .dev-brand-mark { display: grid; width: 22px; height: 22px; flex: none; place-items: center; border-radius: 6px; background: #f1dc48; color: #171814; font-size: 12px; font-weight: 700; letter-spacing: -0.08em; }
 .dev-title-copy { display: flex; min-width: 0; flex-direction: column; gap: 1px; }
-.dev-studio-name { color: #e7e7df; font-size: 9px; font-weight: 600; line-height: 1.2; }
-.dev-project-name { color: #86877e; font: 7px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
-.dev-environment { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 5px 7px; border: 1px solid #34352e; border-radius: 999px; color: #c2c3b9; font: 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
-.dev-environment i, .dev-status-ready i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: #d9c445; }
-.dev-window-control { width: 20px; height: 22px; border: 0; background: transparent; color: #92938a; font-size: 15px; line-height: 1; }
-.dev-workspace-tabs { display: flex; height: 36px; align-items: stretch; gap: 3px; padding: 0 10px; border-bottom: 1px solid #292a25; background: #151613; }
-.dev-workspace-tab { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 0 9px; border: 0; background: transparent; color: #85867d; font-size: 8px; transition: color 180ms ease, background-color 180ms ease; }
-.dev-workspace-tab:hover, .dev-workspace-tab.is-active { color: #f1f0e8; }
-.dev-workspace-tab.is-active::after { position: absolute; right: 8px; bottom: -1px; left: 8px; height: 2px; content: ""; background: #e4cf3b; }
+.dev-studio-name { color: var(--workspace-text); font-size: 9px; font-weight: 600; line-height: 1.2; }
+.dev-project-name { color: var(--workspace-muted); font: 7px/1.2 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.dev-environment { display: inline-flex; align-items: center; gap: 6px; margin-left: auto; padding: 5px 7px; border: 1px solid var(--workspace-border); border-radius: 999px; color: var(--workspace-muted); font: 7px/1 ui-monospace, SFMono-Regular, Menlo, monospace; }
+.dev-environment i, .dev-status-ready i { width: 5px; height: 5px; flex: none; border-radius: 50%; background: var(--workspace-accent); }
+.dev-window-control { width: 20px; height: 22px; border: 0; background: transparent; color: var(--workspace-muted); font-size: 15px; line-height: 1; }
+.dev-workspace-tabs { display: flex; height: 36px; align-items: stretch; gap: 3px; padding: 0 10px; border-bottom: 1px solid var(--workspace-border); background: var(--workspace-bg); }
+.dev-workspace-tabs { opacity: 0; animation: workspace-part-in 360ms var(--motion-ease) 170ms forwards; }
+.dev-workspace-tab { position: relative; display: inline-flex; align-items: center; gap: 6px; padding: 0 9px; border: 0; background: transparent; color: var(--workspace-muted); font-size: 8px; transition: color 180ms ease, background-color 180ms ease; }
+.dev-workspace-tab:hover, .dev-workspace-tab.is-active { color: var(--workspace-text); }
+.dev-workspace-tab.is-active { background: color-mix(in srgb, var(--workspace-elevated) 55%, transparent); }
+.dev-workspace-tab.is-active::after { position: absolute; right: 8px; bottom: -1px; left: 8px; height: 2px; content: ""; background: var(--workspace-accent); }
 .dev-workspace-tabs-spacer { flex: 1; }
-.dev-workspace-file { display: inline-flex; align-items: center; gap: 5px; color: #77786f; font: 7px ui-monospace, SFMono-Regular, Menlo, monospace; }
-.dev-workspace-main { min-height: 278px; background: #121310; }
+.dev-workspace-file { display: inline-flex; align-items: center; gap: 5px; color: var(--workspace-muted); font: 7px ui-monospace, SFMono-Regular, Menlo, monospace; }
+.dev-workspace-main { min-height: 278px; background: var(--workspace-bg); opacity: 0; animation: workspace-part-in 400ms var(--motion-ease) 250ms forwards; }
 .dev-workspace-split { display: grid; min-height: 278px; grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr); }
 .dev-code-editor { min-width: 0; overflow: hidden; border-right: 1px solid #2c2d27; background: #131411; }
 .dev-file-tab { display: flex; height: 29px; align-items: center; gap: 6px; padding: 0 11px; border-bottom: 1px solid #262722; color: #c6c7bd; font: 7px ui-monospace, SFMono-Regular, Menlo, monospace; }
@@ -254,22 +258,25 @@ body {
 .dev-preview-cards span { overflow: hidden; color: #82751c; font: 5px ui-monospace, SFMono-Regular, Menlo, monospace; text-overflow: ellipsis; white-space: nowrap; }
 .dev-preview-cards b { overflow: hidden; font-size: 7px; font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
 .dev-preview-cards i { overflow: hidden; color: #77786f; font-size: 6px; font-style: normal; text-overflow: ellipsis; white-space: nowrap; }
-.dev-terminal { min-height: 54px; padding: 7px 11px 8px; border-top: 1px solid #2d2e28; background: #11120f; }
+.dev-terminal { min-height: 54px; padding: 7px 11px 8px; border-top: 1px solid #2d2e28; background: #11120f; opacity: 0; animation: workspace-part-in 360ms var(--motion-ease) 340ms forwards; }
 .dev-terminal.is-expanded { min-height: 230px; padding: 13px 16px; }
+.dev-terminal:not(.is-expanded) .dev-terminal-lines p:nth-child(n + 3) { display: none; }
 .dev-terminal-heading { display: flex; align-items: center; gap: 6px; color: #adaea5; font-size: 7px; }
 .dev-terminal-heading i { margin-left: auto; color: #77786f; font: 5px ui-monospace, SFMono-Regular, Menlo, monospace; letter-spacing: 0.035em; }
 .dev-terminal-lines { margin-top: 6px; color: #a9aa9f; font: 6px/1.6 ui-monospace, SFMono-Regular, Menlo, monospace; }
 .dev-terminal-lines p { margin: 0; }
-.dev-terminal-lines p + p { color: #898a81; }
+.dev-terminal-lines p + p { color: #a5b09b; }
 .dev-terminal-lines b, .dev-terminal-lines p span { color: #e4cf3b; font-weight: 500; }
+.dev-terminal-lines .dev-terminal-success { color: #91ad8d; }
 .dev-terminal-lines p i { padding-inline: 2px; color: #e4cf3b; font-style: normal; }
 .dev-terminal.is-expanded .dev-terminal-heading { font-size: 9px; }
 .dev-terminal.is-expanded .dev-terminal-heading i { font-size: 7px; }
 .dev-terminal.is-expanded .dev-terminal-lines { margin-top: 16px; font-size: 9px; line-height: 2; }
-.dev-workspace-statusbar { display: flex; min-height: 25px; align-items: center; gap: 10px; padding: 0 10px; border-top: 1px solid #2d2e28; background: #1a1b17; color: #808178; font: 6px ui-monospace, SFMono-Regular, Menlo, monospace; }
-.dev-status-ready { display: inline-flex; align-items: center; gap: 5px; color: #babbaf; }
-.dev-status-detail { color: #77786f; }
+.dev-workspace-statusbar { display: flex; min-height: 25px; align-items: center; gap: 10px; padding: 0 10px; border-top: 1px solid var(--workspace-border); background: var(--workspace-elevated); color: var(--workspace-muted); font: 6px ui-monospace, SFMono-Regular, Menlo, monospace; opacity: 0; animation: workspace-part-in 360ms var(--motion-ease) 420ms forwards; }
+.dev-status-ready { display: inline-flex; align-items: center; gap: 5px; color: var(--workspace-text); }
+.dev-status-detail { color: var(--workspace-muted); }
 .dev-status-branch { margin-left: auto; }
+@keyframes workspace-part-in { from { opacity: 0; translate: 0 4px; } to { opacity: 1; translate: 0 0; } }
 @keyframes workspace-line-in { to { opacity: 1; } }
 
 .blueprint-section { background: var(--surface-alt) !important; color: var(--foreground); }
@@ -323,6 +330,18 @@ body {
   .dev-status-detail { display: none; }
 }
 
+@media (min-width: 640px) and (max-width: 1279px) {
+  .dev-workspace-split { grid-template-columns: minmax(0, 1fr); }
+  .dev-code-editor { border-right: 0; }
+  .dev-product-preview { min-height: 285px; }
+  .dev-preview-heading h3 { font-size: clamp(19px, 2.8vw, 25px); }
+  .dev-preview-heading p { font-size: 9px; }
+  .dev-preview-eyebrow, .dev-preview-board-head, .dev-preview-steps, .dev-preview-cards span { font-size: 7px; }
+  .dev-preview-board svg { height: 64px; }
+  .dev-preview-cards b { font-size: 9px; }
+  .dev-preview-cards i { font-size: 8px; }
+}
+
 @media (max-width: 374px) {
   .dev-preview-content { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); }
   .dev-preview-heading h3 { font-size: 16px; }
@@ -350,4 +369,5 @@ body {
   section[aria-label*="product engine"] > .sticky { position: static !important; min-height: 100svh !important; }
   .theme-transitioning *, .theme-transitioning *::before, .theme-transitioning *::after { transition: none !important; }
   .dev-code-line { animation: none !important; opacity: 1 !important; }
+  .dev-workspace-titlebar, .dev-workspace-tabs, .dev-workspace-main, .dev-terminal, .dev-workspace-statusbar { animation: none !important; opacity: 1 !important; translate: none !important; }
 }

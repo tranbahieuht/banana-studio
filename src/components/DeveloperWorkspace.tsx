@@ -69,8 +69,18 @@ export default function DeveloperWorkspace() {
               type="button"
               role="tab"
               aria-selected={activeTab === id}
+              tabIndex={activeTab === id ? 0 : -1}
               aria-controls="workspace-panel"
               onClick={() => setActiveTab(id)}
+              onKeyDown={(event) => {
+                if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
+                event.preventDefault();
+                const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
+                const direction = event.key === "ArrowRight" ? 1 : -1;
+                const nextTab = tabs[(currentIndex + direction + tabs.length) % tabs.length];
+                setActiveTab(nextTab.id);
+                document.getElementById(`workspace-tab-${nextTab.id}`)?.focus();
+              }}
               className={`dev-workspace-tab ${activeTab === id ? "is-active" : ""}`}
             >
               <Icon size={12} strokeWidth={1.7} />{label}
@@ -165,7 +175,9 @@ function TerminalPanel({ expanded = false }: { expanded?: boolean }) {
       <div className="dev-terminal-heading"><TerminalSquare size={11} /><span>Terminal</span><i>MINH HỌA · KHÔNG PHẢI KẾT QUẢ BUILD THẬT</i></div>
       <div className="dev-terminal-lines">
         <p><b>$</b> npm run build</p>
-        <p><span>›</span> Biên dịch thành công <i>·</i> Tối ưu bản dựng <i>·</i> Sẵn sàng triển khai</p>
+        <p><span className="dev-terminal-success">✓</span> Compiled successfully</p>
+        <p><span className="dev-terminal-success">✓</span> Optimizing production build</p>
+        <p><span className="dev-terminal-success">✓</span> Ready for deployment</p>
       </div>
     </section>
   );
