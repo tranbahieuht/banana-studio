@@ -1,184 +1,126 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { motion, useInView, useMotionValue, useSpring } from "framer-motion";
-import { Braces, Code2, Eye, TerminalSquare } from "lucide-react";
+import { motion, useInView } from "framer-motion";
+import { ArrowUpRight, Braces, Check, ChevronDown, Code2, Eye, FileCode2, GitBranch, GitCommitHorizontal, PanelsTopLeft, PenTool, TerminalSquare, Triangle } from "lucide-react";
 import { useReducedMotion } from "@/lib/useReducedMotion";
 
-const tabs = [
-  { id: "code", label: "Code", icon: Code2 },
-  { id: "preview", label: "Preview", icon: Eye },
-  { id: "terminal", label: "Terminal", icon: TerminalSquare },
-] as const;
-
-type WorkspaceTab = (typeof tabs)[number]["id"];
+const files = ["page.tsx", "Hero.tsx", "globals.css"] as const;
+type OpenFile = (typeof files)[number];
 
 export default function DeveloperWorkspace() {
-  const workspaceRef = useRef<HTMLDivElement>(null);
-  const inView = useInView(workspaceRef, { once: true, amount: 0.12 });
+  const stageRef = useRef<HTMLDivElement>(null);
+  const inView = useInView(stageRef, { once: true, amount: 0.06 });
   const reduceMotion = useReducedMotion();
-  const [activeTab, setActiveTab] = useState<WorkspaceTab>("code");
-  const pointerX = useMotionValue(0);
-  const pointerY = useMotionValue(0);
-  const x = useSpring(pointerX, { damping: 32, stiffness: 70, mass: 0.6 });
-  const y = useSpring(pointerY, { damping: 32, stiffness: 70, mass: 0.6 });
+  const [activeFile, setActiveFile] = useState<OpenFile>("Hero.tsx");
+  const [previewMode, setPreviewMode] = useState("Preview");
 
-  const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (event.pointerType !== "mouse" || reduceMotion) return;
-    const bounds = event.currentTarget.getBoundingClientRect();
-    pointerX.set(((event.clientX - bounds.left) / bounds.width - 0.5) * 3);
-    pointerY.set(((event.clientY - bounds.top) / bounds.height - 0.5) * 2);
-  };
-
-  const resetPointer = () => {
-    pointerX.set(0);
-    pointerY.set(0);
-  };
+  const reveal = (delay: number) => ({
+    initial: reduceMotion ? false : { opacity: 0, y: 16 },
+    animate: inView ? { opacity: 1, y: 0 } : {},
+    transition: { duration: reduceMotion ? 0 : 0.52, delay: reduceMotion ? 0 : delay, ease: [0.22, 1, 0.36, 1] as const },
+  });
 
   return (
-    <motion.div
-      ref={workspaceRef}
-      initial={reduceMotion ? false : { opacity: 0, y: 12, clipPath: "inset(5% 0 0 0)" }}
-      animate={inView ? { opacity: 1, y: 0, clipPath: "inset(0% 0 0 0)" } : {}}
-      transition={{ duration: reduceMotion ? 0 : 0.64, delay: reduceMotion ? 0 : 0.24, ease: [0.22, 1, 0.36, 1] }}
-      className="hero-workspace-wrap relative min-w-0"
-      onPointerMove={handlePointerMove}
-      onPointerLeave={resetPointer}
-    >
-      <div className="workspace-caption mb-2 flex items-center justify-between px-1 font-mono text-[8px] uppercase tracking-[0.14em] sm:text-[9px]">
-        <span>Không gian phát triển / 01</span>
-        <span className="inline-flex items-center gap-2"><i aria-hidden="true" className="workspace-caption-dot" />Bản mô phỏng tương tác</span>
-      </div>
+    <div ref={stageRef} className="hero-workspace-wrap" aria-label="Không gian phát triển sản phẩm minh họa">
+      <svg className="hero-system-lines" viewBox="0 0 1000 660" preserveAspectRatio="none" aria-hidden="true">
+        <path className="hero-connector hero-connector-one" d="M22 174 H105 Q125 174 125 194 V226 H240" />
+        <path className="hero-connector hero-connector-two" d="M490 80 H600 Q622 80 622 102 V142 H760" />
+        <path className="hero-connector hero-connector-three" d="M102 460 H180 Q202 460 202 438 V399 H320" />
+        <path className="hero-connector hero-connector-four" d="M710 514 H820 Q842 514 842 492 V455 H965" />
+        <circle className="hero-connector-node node-one" cx="240" cy="226" r="3" />
+        <circle className="hero-connector-node node-two" cx="760" cy="142" r="3" />
+        <circle className="hero-connector-node node-three" cx="320" cy="399" r="3" />
+        <circle className="hero-connector-node node-four" cx="965" cy="455" r="3" />
+      </svg>
 
-      <motion.div className="dev-workspace" style={reduceMotion ? undefined : { x, y }}>
-        <div className="dev-workspace-titlebar">
-          <div className="dev-brand-mark" aria-hidden="true">B</div>
-          <div className="dev-title-copy">
-            <span className="dev-studio-name">Banana Studio</span>
-            <span className="dev-project-name">banana-project</span>
-          </div>
-          <span className="dev-environment"><i aria-hidden="true" />Development</span>
-          <button type="button" className="dev-window-control" aria-label="Tùy chọn cửa sổ">···</button>
-        </div>
-
-        <div className="dev-workspace-tabs" role="tablist" aria-label="Chế độ xem không gian phát triển">
-          {tabs.map(({ id, label, icon: Icon }) => (
-            <button
-              key={id}
-              id={`workspace-tab-${id}`}
-              type="button"
-              role="tab"
-              aria-selected={activeTab === id}
-              tabIndex={activeTab === id ? 0 : -1}
-              aria-controls="workspace-panel"
-              onClick={() => setActiveTab(id)}
-              onKeyDown={(event) => {
-                if (event.key !== "ArrowRight" && event.key !== "ArrowLeft") return;
-                event.preventDefault();
-                const currentIndex = tabs.findIndex((tab) => tab.id === activeTab);
-                const direction = event.key === "ArrowRight" ? 1 : -1;
-                const nextTab = tabs[(currentIndex + direction + tabs.length) % tabs.length];
-                setActiveTab(nextTab.id);
-                document.getElementById(`workspace-tab-${nextTab.id}`)?.focus();
-              }}
-              className={`dev-workspace-tab ${activeTab === id ? "is-active" : ""}`}
-            >
-              <Icon size={12} strokeWidth={1.7} />{label}
-            </button>
-          ))}
-          <span className="dev-workspace-tabs-spacer" />
-          <span className="dev-workspace-file"><Braces size={11} />TypeScript</span>
-        </div>
-
-        <div
-          id="workspace-panel"
-          role="tabpanel"
-          aria-labelledby={`workspace-tab-${activeTab}`}
-          className={`dev-workspace-main is-${activeTab}`}
-        >
-          {activeTab === "code" && <CodeAndPreview />}
-          {activeTab === "preview" && <ProductPreview expanded />}
-          {activeTab === "terminal" && <TerminalPanel expanded />}
-        </div>
-
-        {activeTab !== "terminal" && <TerminalPanel />}
-
-        <div className="dev-workspace-statusbar">
-          <span className="dev-status-ready"><i aria-hidden="true" />Giao diện minh họa</span>
-          <span className="dev-status-detail">Không kết nối máy chủ</span>
-          <span className="dev-status-branch">banana-project / main</span>
-        </div>
+      <motion.div {...reveal(0.12)} className="hero-workflow-note" aria-label="Quy trình ý tưởng đến ra mắt">
+        <span>Ý TƯỞNG <i>→</i> THIẾT KẾ</span>
+        <span>PHÁT TRIỂN <i>→</i> RA MẮT</span>
+        <b>04 CHẶNG / 01 SẢN PHẨM</b>
       </motion.div>
-    </motion.div>
-  );
-}
 
-function CodeAndPreview() {
-  return (
-    <div className="dev-workspace-split">
-      <section className="dev-code-editor" aria-label="Đoạn mã React minh họa">
-        <div className="dev-file-tab"><span className="dev-file-dot" />Product.tsx <span className="dev-file-close">×</span></div>
-        <pre className="dev-code"><code>
-          <span className="dev-code-line"><i>01</i><span><b>export default function</b> Product() {'{'}</span></span>
-          <span className="dev-code-line"><i>02</i><span>  <b>return</b> (</span></span>
-          <span className="dev-code-line"><i>03</i><span>    &lt;<em>main</em> className=<strong>&quot;product&quot;</strong>&gt;</span></span>
-          <span className="dev-code-line is-current"><i>04</i><span>      &lt;<em>h1</em>&gt;Mỗi ý tưởng&lt;/<em>h1</em>&gt;<i className="dev-code-cursor" aria-hidden="true" /></span></span>
-          <span className="dev-code-line"><i>05</i><span>      &lt;<em>p</em>&gt;Tìm lộ trình phù hợp.&lt;/<em>p</em>&gt;</span></span>
-          <span className="dev-code-line"><i>06</i><span>      &lt;<em>button</em>&gt;Khám phá&lt;/<em>button</em>&gt;</span></span>
-          <span className="dev-code-line"><i>07</i><span>    &lt;/<em>main</em>&gt;</span></span>
-          <span className="dev-code-line"><i>08</i><span>  );</span></span>
-          <span className="dev-code-line"><i>09</i><span>{'}'}</span></span>
-        </code></pre>
-      </section>
-      <ProductPreview />
+      <motion.section {...reveal(0.2)} className="studio-window ide-window" aria-label="Cửa sổ IDE minh họa">
+        <header className="ide-titlebar">
+          <div className="ide-window-lights" aria-hidden="true"><i /><i /><i /></div>
+          <span className="ide-project-title"><span className="ide-banana-mark">B</span>BananaStudio <i>/</i> banana-project</span>
+          <span className="ide-dev-status"><i />Development</span>
+          <button className="ide-kebab" type="button" aria-label="Tùy chọn IDE">···</button>
+        </header>
+
+        <div className="ide-body">
+          <aside className="ide-explorer" aria-label="Danh sách tệp">
+            <div className="ide-explorer-heading">EXPLORER <span>···</span></div>
+            <div className="ide-folder-root"><ChevronDown size={11} />BANANASTUDIO</div>
+            <div className="ide-tree-indent"><div className="ide-tree-row"><ChevronDown size={10} /><span className="tree-folder">src</span></div>
+              <div className="ide-tree-indent"><div className="ide-tree-row"><ChevronDown size={10} /><span className="tree-folder">app</span></div><div className="ide-tree-row is-muted"><FileCode2 size={10} /><span>page.tsx</span></div>
+                <div className="ide-tree-row"><ChevronDown size={10} /><span className="tree-folder">components</span></div><div className="ide-tree-row is-selected"><FileCode2 size={10} /><span>Hero.tsx</span></div><div className="ide-tree-row is-muted"><FileCode2 size={10} /><span>ProjectCard.tsx</span></div><div className="ide-tree-row"><ChevronDown size={10} /><span className="tree-folder">ui</span></div>
+              </div>
+              <div className="ide-tree-row"><ChevronDown size={10} /><span className="tree-folder">lib</span></div>
+            </div>
+            <div className="ide-tree-row ide-root-file"><Braces size={10} /><span>next.config.ts</span></div><div className="ide-tree-row ide-root-file"><Braces size={10} /><span>package.json</span></div>
+            <div className="ide-explorer-footer"><GitBranch size={10} /> main <span><GitCommitHorizontal size={10} /> 3</span></div>
+          </aside>
+
+          <div className="ide-editor">
+            <div className="ide-file-tabs" role="tablist" aria-label="Tệp đang mở">
+              {files.map((file) => (
+                <button key={file} type="button" role="tab" aria-selected={activeFile === file} className={activeFile === file ? "is-active" : ""} onClick={() => setActiveFile(file)}>
+                  {file.endsWith("css") ? <span className="file-css">#</span> : <FileCode2 size={11} />} {file}
+                </button>
+              ))}
+            </div>
+            <div className="ide-breadcrumb"><span>src</span><i>/</i><span>{activeFile === "page.tsx" ? "app" : "components"}</span><i>/</i><b>{activeFile}</b><span className="ide-language">TypeScript React</span></div>
+            <pre className="ide-code" aria-label="Mã React minh họa"><code>
+              <span className="ide-line"><i>01</i><span><em>export default function</em> <b>Hero</b>() {'{'}</span></span>
+              <span className="ide-line"><i>02</i><span>  <strong>return</strong> (</span></span>
+              <span className="ide-line"><i>03</i><span>    &lt;<b>main</b> className=<mark>&quot;product&quot;</mark>&gt;</span></span>
+              <span className="ide-line is-current"><i>04</i><span>      &lt;<b>h1</b>&gt;Nơi hiện thực ý tưởng&lt;/<b>h1</b>&gt;<i className="ide-caret" /></span></span>
+              <span className="ide-line"><i>05</i><span>      &lt;<b>Preview</b> project={'{'}project{'}'} /&gt;</span></span>
+              <span className="ide-line"><i>06</i><span>      &lt;<b>ProjectCard</b> items={'{'}work{'}'} /&gt;</span></span>
+              <span className="ide-line"><i>07</i><span>      &lt;<b>Action</b> href=<mark>&quot;#contact&quot;</mark> /&gt;</span></span>
+              <span className="ide-line"><i>08</i><span>    &lt;/<b>main</b>&gt;</span></span>
+              <span className="ide-line"><i>09</i><span>  );</span></span>
+              <span className="ide-line"><i>10</i><span>{'}'}</span></span>
+            </code></pre>
+            <div className="ide-statusbar"><span><GitBranch size={10} /> main</span><span>Ln 04, Col 32</span><span>UTF-8</span><span>TypeScript JSX</span></div>
+          </div>
+        </div>
+      </motion.section>
+
+      <motion.section {...reveal(0.34)} className={`studio-window live-preview-window preview-${previewMode.toLowerCase()}`} aria-label="Live Preview minh họa">
+        <header className="preview-titlebar">
+          <div className="preview-window-icon"><PanelsTopLeft size={13} /></div><strong>Live Preview</strong><span className="preview-url">bananastudio.vn</span><span className="preview-live"><i />LIVE</span>
+        </header>
+        <div className="preview-toolbar" role="tablist" aria-label="Chế độ preview">
+          {["Preview", "Design", "Mobile"].map((mode) => <button key={mode} type="button" role="tab" aria-selected={previewMode === mode} className={previewMode === mode ? "is-active" : ""} onClick={() => setPreviewMode(mode)}>{mode}</button>)}
+          <span><Eye size={11} /> 100%</span>
+        </div>
+        <div className="preview-page">
+          <nav className="preview-nav"><span className="preview-logo">B<span>.</span></span><span>Dự án&nbsp;&nbsp;&nbsp; Studio&nbsp;&nbsp;&nbsp; Liên hệ</span><span className="preview-nav-cta">Bắt đầu <ArrowUpRight size={9} /></span></nav>
+          <div className="preview-hero-content"><small>THIẾT KẾ · PHÁT TRIỂN · SẢN PHẨM</small><h3>Nơi hiện thực<br />ý tưởng của bạn<span>.</span></h3><p>Những sản phẩm số hữu ích, bắt đầu từ một ý tưởng tốt.</p><button type="button" tabIndex={-1}>Khám phá dự án <ArrowUpRight size={9} /></button></div>
+          <div className="preview-project-art" aria-hidden="true"><div className="preview-art-orbit" /><div className="preview-art-frame"><span>01 / DIGITAL PRODUCT</span><b>Ý tưởng<br />thành hình.</b><i>PRODUCT SYSTEM&nbsp;&nbsp; 2026</i></div><div className="preview-art-index">BANANA STUDIO&nbsp; — &nbsp;001</div></div>
+          <div className="preview-page-foot"><span>01 / 04</span><span>THIẾT KẾ CÓ CHỦ ĐÍCH</span></div>
+        </div>
+      </motion.section>
+
+      <motion.section {...reveal(0.46)} className="studio-window terminal-window" aria-label="Terminal minh họa, không phải phiên chạy thật">
+        <header className="floating-window-heading"><TerminalSquare size={13} /><strong>TERMINAL</strong><span>CHỈ LÀ BẢN MÔ PHỎNG</span></header>
+        <div className="terminal-lines"><p><i>PS</i> D:\STARTUP\studio&gt; <b>npm run dev</b></p><p><span>&gt;</span> banana-studio@1.0.0 dev</p><p><span>&gt;</span> next dev</p><p className="terminal-ready"><Check size={11} /> Ready in 1.8s <span>Local: localhost:3000</span></p></div>
+      </motion.section>
+
+      <motion.section {...reveal(0.56)} className="studio-window deploy-window" aria-label="Trạng thái triển khai minh họa, không phải deployment thực tế">
+        <header className="deploy-heading"><div><Triangle size={13} fill="currentColor" /><strong>Deploy to Vercel</strong></div><span>BẢN MÔ PHỎNG</span></header>
+        <ul><li><Check size={11} />Build completed</li><li><Check size={11} />Deploying...</li><li><Check size={11} />Production ready</li></ul>
+        <button type="button" disabled title="Chưa kết nối website production">View Live Site <ArrowUpRight size={11} /></button>
+      </motion.section>
+
+      <motion.div {...reveal(0.66)} className="hero-toolset" aria-label="Công cụ thiết kế và phát triển">
+        <span className="toolset-label">CÔNG CỤ</span><span><PenTool size={12} />Figma</span><span><Code2 size={12} />Code</span><span><GitBranch size={12} />Git</span><span><Triangle size={11} />Vercel</span>
+      </motion.div>
+
+      <div className="hero-handnote handnote-one" aria-hidden="true">ý tưởng<br />→ sản phẩm</div>
+      <div className="hero-handnote handnote-two" aria-hidden="true">từng chi tiết<br />đều có lý do</div>
     </div>
-  );
-}
-
-function ProductPreview({ expanded = false }: { expanded?: boolean }) {
-  return (
-    <section className={`dev-product-preview ${expanded ? "is-expanded" : ""}`} aria-label="Bản xem trước sản phẩm minh họa">
-      <div className="dev-preview-topbar">
-        <span className="dev-preview-mark">B.</span>
-        <span className="dev-preview-nav"><i />Tổng quan <i />Dự án <i />Lộ trình</span>
-        <span className="dev-preview-user">A</span>
-      </div>
-      <div className="dev-preview-content">
-        <div className="dev-preview-heading">
-          <span className="dev-preview-eyebrow">KHÔNG GIAN Ý TƯỞNG / BẢN XEM TRƯỚC</span>
-          <h3>Mỗi ý tưởng<br />đều có lộ trình.</h3>
-          <p>Một nơi để biến suy nghĩ ban đầu thành điều có thể bắt đầu.</p>
-          <button type="button" tabIndex={-1}>Khám phá dự án <span aria-hidden="true">↗</span></button>
-        </div>
-        <div className="dev-preview-board" aria-hidden="true">
-          <div className="dev-preview-board-head"><span>HÀNH TRÌNH SẢN PHẨM</span><span>01 — 03</span></div>
-          <svg viewBox="0 0 220 104" role="presentation">
-            <path className="dev-chart-grid" d="M0 25H220M0 52H220M0 79H220M44 0V104M88 0V104M132 0V104M176 0V104" />
-            <path className="dev-chart-line" d="M5 83 C34 78 35 61 60 65 S89 40 112 47 S147 24 164 35 S194 15 215 13" />
-            <circle className="dev-chart-point" cx="164" cy="35" r="3" />
-          </svg>
-          <div className="dev-preview-steps"><span>Ý tưởng</span><span>Thiết kế</span><span>Sản phẩm</span></div>
-        </div>
-      </div>
-      <div className="dev-preview-cards">
-        <div><span>01 / KHÁM PHÁ</span><b>Hiểu vấn đề</b><i>Định hình hướng đi</i></div>
-        <div><span>02 / THIẾT KẾ</span><b>Tạo trải nghiệm</b><i>Thử nghiệm luồng dùng</i></div>
-        <div><span>03 / PHÁT TRIỂN</span><b>Ra mắt sản phẩm</b><i>Hoàn thiện từng bước</i></div>
-      </div>
-    </section>
-  );
-}
-
-function TerminalPanel({ expanded = false }: { expanded?: boolean }) {
-  return (
-    <section className={`dev-terminal ${expanded ? "is-expanded" : ""}`} aria-label="Terminal minh họa">
-      <div className="dev-terminal-heading"><TerminalSquare size={11} /><span>Terminal</span><i>MINH HỌA · KHÔNG PHẢI KẾT QUẢ BUILD THẬT</i></div>
-      <div className="dev-terminal-lines">
-        <p><b>$</b> npm run build</p>
-        <p><span className="dev-terminal-success">✓</span> Compiled successfully</p>
-        <p><span className="dev-terminal-success">✓</span> Optimizing production build</p>
-        <p><span className="dev-terminal-success">✓</span> Ready for deployment</p>
-      </div>
-    </section>
   );
 }
